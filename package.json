@@ -1,0 +1,30 @@
+{
+  "name": "node_rest_api_jwt",
+  "version": "1.0.0",
+  "description": "Server node js",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "keywords": [
+    "Node",
+    "Express",
+    "REST",
+    "API",
+    "Mongodb"
+  ],
+  "author": "Rafael Souza",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "2.0.1",
+    "body-parser": "1.18.2",
+    "express": "4.16.3",
+    "jsonwebtoken": "8.2.1",
+    "mongoose": "5.0.13",
+    "morgan": "1.9.0"
+  },
+  "devDependencies": {
+    "eslint": "4.19.1",
+    "nodemon": "^1.19.1"
+  }
+}
