@@ -3,18 +3,34 @@ const logger = require('morgan');
 const users = require('./routes/users');
 const bodyParser = require('body-parser');
 const mongoose = require('./config/database'); //database configuration
-//const jwt = require('jsonwebtoken');
-const app = express();
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
+const app = express();
 const port = 3333;
 
 app.set('secretKey', 'nodeRestApi'); // jwt secret token
-
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+//app.use(bodyParser.urlencoded({ extended: true }));
 app.use(logger('dev'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(cors())
+
+// for parsing json
+app.use(
+  bodyParser.json({
+    limit: '20mb'
+  })
+)
+
+// for parsing application/x-www-form-urlencoded
+app.use(
+  bodyParser.urlencoded({
+    limit: '20mb',
+    extended: true
+  })
+)
 
 app.get('/', function(req, res){
   res.json({ "Error" : "Route not found" });
@@ -22,24 +38,6 @@ app.get('/', function(req, res){
 
 // public route
 app.use('/user', users);
-
-// // private route
-// app.use('/apostilas', validateUser, () => {
-//   return 'Hello world'
-// } );
-
-// function validateUser(req, res, next) {
-//   jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function(err, decoded) {
-//     if (err) {
-//       res.json({status:"error", message: err.message, data:null});
-//     }else{
-//       // add user id to request
-//       req.body.userId = decoded.id;
-//       next();
-//     }
-//   });
-  
-// }
 
 // express doesn't consider not found 404 as an error so we need to handle 404 it explicitly
 // handle 404 error

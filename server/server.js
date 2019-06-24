@@ -3,10 +3,24 @@ const logger = require('morgan');
 const users = require('./routes/users');
 const bodyParser = require('body-parser');
 const mongoose = require('./config/database'); //database configuration
+const cors = require('cors');
+
 //const jwt = require('jsonwebtoken');
 const app = express();
 
-const port = 3333;
+const port = process.env.PORT || 3333;
+
+const corsMiddleware = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*'); //replace localhost with actual host
+  res.header('Access-Control-Allow-Methods', 'OPTIONS, GET, PUT, PATCH, POST, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, Authorization');
+
+  next();
+}
+//app.use(cors);
+
+app.use(corsMiddleware);
+
 
 app.set('secretKey', 'nodeRestApi'); // jwt secret token
 
@@ -14,7 +28,10 @@ app.set('secretKey', 'nodeRestApi'); // jwt secret token
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(logger('dev'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false}));
+
+// parse application/json
+app.use(bodyParser.json());
 
 app.get('/', function(req, res){
   res.json({ "Error" : "Route not found" });
@@ -22,24 +39,6 @@ app.get('/', function(req, res){
 
 // public route
 app.use('/user', users);
-
-// // private route
-// app.use('/apostilas', validateUser, () => {
-//   return 'Hello world'
-// } );
-
-// function validateUser(req, res, next) {
-//   jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function(err, decoded) {
-//     if (err) {
-//       res.json({status:"error", message: err.message, data:null});
-//     }else{
-//       // add user id to request
-//       req.body.userId = decoded.id;
-//       next();
-//     }
-//   });
-  
-// }
 
 // express doesn't consider not found 404 as an error so we need to handle 404 it explicitly
 // handle 404 error
