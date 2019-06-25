@@ -21,7 +21,6 @@ class Login extends Component {
     } else {
       try {
         const response = await api.post("/user/auth", { email, password });
-        console.log(response);
         if(response.data.data.token !== undefined) {
           login(response.data.data.token);
           this.props.history.push("/beers");

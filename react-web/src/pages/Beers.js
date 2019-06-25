@@ -11,13 +11,11 @@ export default class Beers extends Component {
     data:[],
     per_page: 20,
     page: 1,
-    item: null
+    id: null
   }
 
   async componentDidMount() {
-    
     const { page, per_page } = this.state;
-
     await axios.get(`https://api.punkapi.com/v2/beers?page=${page}&per_page=${per_page}`)
     .then(response => {
       console.log(response);
@@ -25,8 +23,8 @@ export default class Beers extends Component {
     })
   }
 
+
   async getMoreResults() {
-    console.log(this.state.per_page);
     if(this.state.per_page >= 70){
       this.setState({page: this.state.page += 1, per_page: 20})
       this.componentDidMount();
@@ -36,16 +34,16 @@ export default class Beers extends Component {
   }
 
   async handleDetails(id) {
-    console.log(id)
-    await axios.get(`https://api.punkapi.com/v2/beers/${id.index + 1}`)
-    .then(resp => {
-      console.log(resp.data);
-      this.setState({item: resp.data});
-    })
+    console.log(`beer component clicou, id: ${id.index}`);
+    await this.setState({ id: id.index });
   }
 
+  // async componentWillUpdate() {
+  //   this.setState({id: this.state.id});
+  // }
+
   render() {
-    const { data, item } = this.state; 
+    const { data, id } = this.state; 
     return(
     <>
       <div className="Beers-container">
@@ -54,9 +52,9 @@ export default class Beers extends Component {
           return(
             <div className="beers-column" key={index} onClick={() => this.handleDetails({index})}>
               <img src={src.image_url} alt="cerveja" className="cerveja-image"/>
-              <p>Name: {src.name}</p>
-              <p>Volume: {src.volume.value} {src.volume.unit}</p>
-              <p>Alcohol by Volume: {src.abv}</p>
+              <p><strong>Name: </strong>{src.name}</p>
+              <p><strong>Volume: </strong>{src.volume.value} {src.volume.unit}</p>
+              <p><strong>Alcohol by Volume:</strong> {src.abv}</p>
             </div>
           )  
         })
@@ -64,7 +62,7 @@ export default class Beers extends Component {
         <div className="div-button-paginate">
           <button className="button-paginate" onClick={() => this.getMoreResults()}>Carregar mais</button>
         </div>
-        {item !== null ? <ModalDetails item={this.state.item[0]}/> : ''}
+        {this.state.id !== null ? <ModalDetails id={this.state.id} show={true}/> : ''}
       </div>
     </>
     )
