@@ -8,7 +8,14 @@ export const Container = styled.div`
   justify-content: center;
 `;
 
-export const Form = styled.form``;
+export const Form = styled.form`
+  width: 50%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;;
+`;
 
 export const H1 = styled.h1`
   color: rgba(1,2,55,0.5);

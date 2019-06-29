@@ -41,7 +41,6 @@ class Login extends Component {
       <Container className="login-container">
         <Form onSubmit={(e) => this.handleLogin(e)}>
           <H1>Login</H1>
-          {this.state.error && <p style={{color: 'red'}}>{this.state.error}</p>}
           <input
             type="email"
             placeholder="Endereço de e-mail"
@@ -55,6 +54,7 @@ class Login extends Component {
           <button type="submit">Entrar</button>
           <hr />
           <Link className="link" to="/signup">Criar conta grátis</Link>
+          {this.state.error && <p style={{color: 'red'}}>{this.state.error}</p>}
         </Form>
       </Container>
     );
