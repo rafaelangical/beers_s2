@@ -2,10 +2,14 @@ import React from 'react';
 import './App.css';
 import Routes from './Routes';
 import { logout } from './services/auth';
+import { connect } from 'react-redux';
+import { fetchBeers } from '../src/actions';
 
 class App extends React.Component {
-  componentDidMount() {
-    logout();
+  async componentDidMount() {
+    await logout();
+    const { fetchBeers } = await this.props;
+    await fetchBeers(1, 20);
   }  
   render() {
     return (
@@ -15,5 +19,11 @@ class App extends React.Component {
     );
   }
 }
+const mapDispatchToProps = {
+  fetchBeers: fetchBeers,
+};
+
+App = connect(null,mapDispatchToProps)(App);
 
 export default App;
+
